@@ -15,9 +15,24 @@ TRUE_CLASSES = "users_diagnosis.pkl"
 def aggregate_datafile(filename, hasPD):
 	user = filename.split("/")[2].split("_")[0]
 	data = np.genfromtxt(filename, delimiter="\t", usecols=(3,4,5,6,7,8,9,10,11,12,13,14,15,16,17))
+	left_data = data[data[:, 0] == 1]
+	right_data = data[data[:, 1] == 1]
+	#space_data = data[data[:, 2] == 1]
+	
+	#Collect HoldTime features
 	#Left finger : mean, standard deviation, skewness and kurtosis of Hold Time
 	#Right finger : mean, standard deviation, skewness and kurtosis of Hold Time
-	#Mean(hold_time_left) - Mean(hold_time_right)
+	#Mean difference between Left and Right
+	mean_left = np.mean(left_data, axis=0)[3]
+	mean_right = np.mean(right_data, axis=0)[3]
+	std_left = np.std(left_data, axis=0)[3]
+	std_right = np.std(right_data, axis=0)[3]
+	skewness_left = skew(left_data, axis=0)[3]
+	skewness_right = skew(right_data, axis=0)[3]
+	kurtosis_left = kurtosis(left_data, axis=0)[3]
+	kurtosis_right = kurtosis(right_data, axis=0)[3]
+	mean_difference = abs(mean_left - mean_right)
+
 	line = ""
 	for i in range(len(data[0])):
 		line += str(data[0][i]) + "\t"
