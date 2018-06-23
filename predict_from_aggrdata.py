@@ -17,8 +17,8 @@ from sklearn.neighbors import KNeighborsClassifier
 from sklearn.discriminant_analysis import QuadraticDiscriminantAnalysis
 from sklearn.metrics import accuracy_score, recall_score, f1_score
 
-AGGR_DATA = "./aggregated_data/data.csv"
-RESULTS = "./results.csv"
+AGGR_DATA = "~/my_drive/ML_project/aggregated_data/data.csv"
+RESULTS = "~/my_drive/ML_project/results.csv"
 Wt = 1.2
 
 def load_data():
@@ -87,7 +87,7 @@ def build_classifier(x_train, y_train):
     params["lrm__fit_intercept"] = [True, False]
 
     #Random Forest
-    rf = RandomForestClassifier(criterion="entropy")
+    rf = RandomForestClassifier(criterion="entropy", n_jobs=-1)
     params["rf__n_estimators"] = [10, 100]
 
     #NSVC
@@ -113,8 +113,8 @@ def build_classifier(x_train, y_train):
         ("dt", dt),
         ("knn", knn),
         ("qda", qda)]
-    clf = VotingClassifier(est, voting='soft', n_jobs=7)
-    grid = GridSearchCV(estimator=clf, param_grid=params, cv=kf, n_jobs=7, scoring="accuracy")
+    clf = VotingClassifier(est, voting='soft', n_jobs=-1)
+    grid = GridSearchCV(estimator=clf, param_grid=params, cv=kf, n_jobs=-1, scoring="accuracy")
 
     print("Tuning parameters..")
     grid.fit(x_train, y_train)
