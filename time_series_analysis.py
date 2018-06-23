@@ -16,7 +16,7 @@ def aggregate_datafile(filename, hasPD):
 	user = filename.split("/")[2].split("_")[0]
 	data = np.genfromtxt(filename, delimiter="\t", usecols=(3,4,5,6,7,8,9,10,11,12,13,14,15,16,17))
 	if (data.ndim < 2):
-		print("Warning: small file\n")
+		print("WARNING: small file\n")
 		return ""
 	left_data = data[data[:, 0] == 1]
 	right_data = data[data[:, 1] == 1]
@@ -37,24 +37,24 @@ def aggregate_datafile(filename, hasPD):
 		skewness_left = skew(left_data, axis=0)[3]
 		kurtosis_left = kurtosis(left_data, axis=0)[3]
 	else:
-		mean_left = ""
-		std_left = ""
-		skewness_left = ""
-		kurtosis_left = ""
+		mean_left = np.nan
+		std_left = np.nan
+		skewness_left = np.nan
+		kurtosis_left = np.nan
 	if len(right_data) > 0:
 		std_right = np.std(right_data, axis=0)[3]
 		mean_right = np.mean(right_data, axis=0)[3]
 		skewness_right = skew(right_data, axis=0)[3]
 		kurtosis_right = kurtosis(right_data, axis=0)[3]
 	else:
-		mean_right = ""
-		std_right = ""
-		skewness_right = ""
-		kurtosis_right = ""
+		mean_right = np.nan
+		std_right = np.nan
+		skewness_right = np.nan
+		kurtosis_right = np.nan
 	if len(right_data) > 0 and len(left_data) > 0:
 		mean_difference = abs(mean_left - mean_right)
 	else:
-		mean_difference = ""
+		mean_difference = np.nan
 
 	#Feature Group: Latency
 	#Left to Right: mean, standard deviation, skewness and kurtosis of Latency Time
@@ -69,24 +69,24 @@ def aggregate_datafile(filename, hasPD):
 		skewness_left_to_right = skew(left_to_right_data, axis=0)[13]
 		kurtosis_left_to_right = kurtosis(left_to_right_data, axis=0)[13]
 	else:
-		mean_left_to_right = ""
-		std_left_to_right = ""
-		skewness_left_to_right = ""
-		kurtosis_left_to_right = ""
+		mean_left_to_right = np.nan
+		std_left_to_right = np.nan
+		skewness_left_to_right = np.nan
+		kurtosis_left_to_right = np.nan
 	if len(right_to_left_data) > 0:
 		mean_right_to_left = np.mean(right_to_left_data, axis=0)[13]
 		std_right_to_left = np.std(right_to_left_data, axis=0)[13]
 		skewness_right_to_left = skew(right_to_left_data, axis=0)[13]
 		kurtosis_right_to_left = kurtosis(right_to_left_data, axis=0)[13]
 	else:
-		mean_right_to_left = ""
-		std_right_to_left = ""
-		skewness_right_to_left = ""
-		kurtosis_right_to_left = ""
+		mean_right_to_left = np.nan
+		std_right_to_left = np.nan
+		skewness_right_to_left = np.nan
+		kurtosis_right_to_left = np.nan
 	if len(left_to_right_data) > 0 and len(right_to_left_data) > 0:
 		mean_difference_LR_RL = abs(mean_left_to_right - mean_right_to_left)
 	else:
-		mean_difference_LR_RL = ""
+		mean_difference_LR_RL = np.nan
 
 	if len(left_to_left_data) > 0:
 		mean_left_to_left = np.mean(left_to_left_data, axis=0)[13]
@@ -94,24 +94,24 @@ def aggregate_datafile(filename, hasPD):
 		skewness_left_to_left = skew(left_to_left_data, axis=0)[13]
 		kurtosis_left_to_left = kurtosis(left_to_left_data, axis=0)[13]
 	else:
-		mean_left_to_left = ""
-		std_left_to_left = ""
-		skewness_left_to_left = ""
-		kurtosis_left_to_left = ""
+		mean_left_to_left = np.nan
+		std_left_to_left = np.nan
+		skewness_left_to_left = np.nan
+		kurtosis_left_to_left = np.nan
 	if len(right_to_right_data) > 0:
 		mean_right_to_right = np.mean(right_to_right_data, axis=0)[13]
 		std_right_to_right = np.std(right_to_right_data, axis=0)[13]
 		skewness_right_to_right = skew(right_to_right_data, axis=0)[13]
 		kurtosis_right_to_right = kurtosis(right_to_right_data, axis=0)[13]
 	else:
-		mean_right_to_right = ""
-		std_right_to_right = ""
-		skewness_right_to_right = ""
-		kurtosis_right_to_right = ""
+		mean_right_to_right = np.nan
+		std_right_to_right = np.nan
+		skewness_right_to_right = np.nan
+		kurtosis_right_to_right = np.nan
 	if len(left_to_left_data) > 0 and len(right_to_right_data) > 0:
 		mean_difference_LL_RR = abs(mean_left_to_left - mean_right_to_right)
 	else:
-		mean_difference_LL_RR = ""
+		mean_difference_LL_RR = np.nan
 
 	line = str(mean_left) + "\t" + str(std_left) + "\t" + str(skewness_left) + "\t" + str(kurtosis_left) + "\t"
 	line += str(mean_right) + "\t" + str(std_right) + "\t" + str(skewness_right) + "\t" + str(kurtosis_right) + "\t" + str(mean_difference) + "\t"
