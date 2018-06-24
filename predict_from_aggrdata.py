@@ -155,8 +155,8 @@ def evaluate(hold_clf, latency_clf, h_eval, l_eval, y_eval):
     fn = 0
     tn = 0
     for index,out in enumerate(y_eval):
-        print(answers[index], out)
         if answers[index] == out and out == 1.0:
+            print(answers[index], out)
             tp = tp + 1
         elif answers[index] == out and out == 0.0:
             fp = fp + 1
