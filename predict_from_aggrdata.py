@@ -67,39 +67,48 @@ def load_data():
     return h_train, l_train, y_train, h_eval, l_eval, y_eval
 
 
-def build_classifier(x_train, y_train):
+def build_classifier(x_train, y_train, mode):
     #Make 10-folds cross validation
     kf = KFold(n_splits=10, shuffle=False)
     params = dict()
 
     #SVM Classifier
     svm = SVC(probability=True)
-    params["svm__C"] = list(np.logspace(-2, 8, 2))
-    params["svm__gamma"] = list(np.logspace(-9, 3, 2))
+    if mode == "HOLD":
+        params["svm__C"] = [100000000.0]#list(np.logspace(-2, 8, 2))
+    else:
+        params["svm__C"] = [0.01]
+    params["svm__gamma"] = [1000.0]#list(np.logspace(-9, 3, 2))
 
     #Multi-layer Perceptron
     mlp = MLPClassifier(activation="relu", batch_size=100)
-    params["mlp__hidden_layer_sizes"] = [(100,), (50, 50,)]
+    if mode == "HOLD":
+        params["mlp__hidden_layer_sizes"] = [(100,)]#, (50, 50,)]
+    else:
+        params["mlp__hidden_layer_sizes"] = [(50, 50,)]
     #params["mlp__learning_rate_init"] = [0.001, 0.01]
 
     #Logistic Regression Model
     lrm = LogisticRegression()
-    params["lrm__fit_intercept"] = [True, False]
+    if mode == "HOLD":
+        params["lrm__fit_intercept"] = [False]#, False]
+    else:
+        params["lrm__fit_intercept"] = [True]#, False]
 
     #Random Forest
     rf = RandomForestClassifier(criterion="entropy", n_jobs=-1)
-    params["rf__n_estimators"] = [10, 50]
+    params["rf__n_estimators"] = [10]#, 50]
 
     #NSVC
     nsvc = NuSVC(nu=0.01, probability=True)
-    params["nsvc__gamma"] = list(np.logspace(-2, 8, 2))
+    params["nsvc__gamma"] = [0.01]#list(np.logspace(-2, 8, 2))
 
     #Decision Tree
     dt = DecisionTreeClassifier(criterion="entropy")
 
     #K-nearest Neighbors
     knn = KNeighborsClassifier()
-    params["knn__n_neighbors"] = [5, 10]
+    params["knn__n_neighbors"] = [5]#, 10]
 
     #Quadratic Discriminant Analysis
     qda = QuadraticDiscriminantAnalysis(tol=0.001, store_covariances=False)
@@ -134,7 +143,6 @@ def get_answers(ph, pl):
 def evaluate(hold_clf, latency_clf, h_eval, l_eval, y_eval):
     ph = hold_clf.predict_proba(h_eval)[:,1]
     pl = latency_clf.predict_proba(l_eval)[:,1]
-    get_answers = np.vectorize(get_answers)
     answers = get_answers(ph, pl)
     accuracy = accuracy_score(y_eval, answers)
     print("Accuracy: ", accuracy)
@@ -163,6 +171,7 @@ def evaluate(hold_clf, latency_clf, h_eval, l_eval, y_eval):
 with warnings.catch_warnings():
     warnings.simplefilter("ignore")
     h_train, l_train, y_train, h_eval, l_eval, y_eval = load_data()
-    hold_clf = build_classifier(h_train, y_train)
-    latency_clf = build_classifier(l_train, y_train)
+    hold_clf = build_classifier(h_train, y_train, "HOLD")
+    latency_clf = build_classifier(l_train, y_train, "LATENCY")
+    get_answers = np.vectorize(get_answers)
     evaluate(hold_clf, latency_clf, h_eval, l_eval, y_eval)
