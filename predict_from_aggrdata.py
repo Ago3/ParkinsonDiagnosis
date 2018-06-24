@@ -171,6 +171,7 @@ def evaluate(hold_clf, latency_clf, h_eval, l_eval, y_eval):
 with warnings.catch_warnings():
     warnings.simplefilter("ignore")
     h_train, l_train, y_train, h_eval, l_eval, y_eval = load_data()
+    print(0.0 in y_eval)
     hold_clf = build_classifier(h_train, y_train, "HOLD")
     latency_clf = build_classifier(l_train, y_train, "LATENCY")
     get_answers = np.vectorize(get_answers)
