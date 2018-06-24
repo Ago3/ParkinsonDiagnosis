@@ -156,14 +156,13 @@ def evaluate(hold_clf, latency_clf, h_eval, l_eval, y_eval):
     tn = 0
     for index,out in enumerate(y_eval):
         if answers[index] == out and out == 1.0:
-            print(answers[index], out)
             tp = tp + 1
         elif answers[index] == out and out == 0.0:
-            fp = fp + 1
+            tn = tn + 1
         elif out == 1.0:
             fn = fn + 1
         else:
-            tn = tn + 1
+            fp = fp + 1
     print(tp, fp, tn, fn)
     with open(RESULTS, "w+") as res:
         res.write("accuracy\trecall\tf1\ttp\tfp\ttn\tfn\n")
