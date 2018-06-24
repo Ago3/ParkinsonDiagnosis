@@ -75,7 +75,7 @@ def build_classifier(x_train, y_train, mode):
     #SVM Classifier
     svm = SVC(probability=True)
     if mode == "HOLD":
-        params["svm__C"] = [100000000.0]#list(np.logspace(-2, 8, 2))
+        params["svm__C"] = [0.01]#list(np.logspace(-2, 8, 2))
     else:
         params["svm__C"] = [0.01]
     params["svm__gamma"] = [1000.0]#list(np.logspace(-9, 3, 2))
