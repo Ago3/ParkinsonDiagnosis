@@ -17,8 +17,8 @@ from sklearn.neighbors import KNeighborsClassifier
 from sklearn.discriminant_analysis import QuadraticDiscriminantAnalysis
 from sklearn.metrics import accuracy_score, recall_score, f1_score
 
-AGGR_DATA = "~/my_drive/ML_project/aggregated_data/data.csv"
-RESULTS = "~/my_drive/ML_project/results.csv"
+AGGR_DATA = "./aggregated_data/data.csv"
+RESULTS = "./results.csv"
 Wt = 1.2
 
 def load_data():
