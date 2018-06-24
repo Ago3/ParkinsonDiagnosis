@@ -141,10 +141,10 @@ def get_answers(ph, pl):
 
 
 def evaluate(hold_clf, latency_clf, h_eval, l_eval, y_eval):
-    print(hold_clf.score(h_eval, y_eval))
-    print(confusion_matrix(y_eval, hold_clf.predict(h_eval)))
-    print(latency_clf.score(l_eval, y_eval))
-    print(confusion_matrix(y_eval, latency_clf.predict(l_eval)))
+    print("Accuracy HOLD classifier: ", hold_clf.score(h_eval, y_eval))
+    print("Confusion matrix: \n", confusion_matrix(y_eval, hold_clf.predict(h_eval)))
+    print("Accuracy LATENCY classifier: ", latency_clf.score(l_eval, y_eval))
+    print("Confusion matrix: \n", confusion_matrix(y_eval, latency_clf.predict(l_eval)))
     ph = hold_clf.predict_proba(h_eval)[:,1]
     pl = latency_clf.predict_proba(l_eval)[:,1]
     answers = get_answers(ph, pl)
@@ -154,19 +154,20 @@ def evaluate(hold_clf, latency_clf, h_eval, l_eval, y_eval):
     print("Recall: ", recall)
     f1 = f1_score(y_eval, answers)
     print("F1: ", f1)
-    tp = 0
-    fp = 0
-    fn = 0
-    tn = 0
-    for index,out in enumerate(y_eval):
-        if answers[index] == out and out == 1.0:
-            tp = tp + 1
-        elif answers[index] == out and out == 0.0:
-            tn = tn + 1
-        elif out == 1.0:
-            fn = fn + 1
-        else:
-            fp = fp + 1
+    tn, fp, fn, tp = confusion_matrix(y_eval, answers)
+    # tp = 0
+    # fp = 0
+    # fn = 0
+    # tn = 0
+    # for index,out in enumerate(y_eval):
+    #     if answers[index] == out and out == 1.0:
+    #         tp = tp + 1
+    #     elif answers[index] == out and out == 0.0:
+    #         tn = tn + 1
+    #     elif out == 1.0:
+    #         fn = fn + 1
+    #     else:
+    #         fp = fp + 1
     print(tp, fp, tn, fn)
     with open(RESULTS, "w+") as res:
         res.write("accuracy\trecall\tf1\ttp\tfp\ttn\tfn\n")
@@ -183,7 +184,8 @@ with warnings.catch_warnings():
     for el in y_eval:
         if el == 0.0:
             eval_neg += 1
-    print(train_neg, eval_neg)
+    print("Training instances having true classification = 0: ", train_neg)
+    print("Testing instances having true classification = 0: ", eval_neg)
     hold_clf = build_classifier(h_train, y_train, "HOLD")
     latency_clf = build_classifier(l_train, y_train, "LATENCY")
     get_answers = np.vectorize(get_answers)
