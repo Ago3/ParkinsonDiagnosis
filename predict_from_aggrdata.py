@@ -154,7 +154,7 @@ def evaluate(hold_clf, latency_clf, h_eval, l_eval, y_eval):
     print("Recall: ", recall)
     f1 = f1_score(y_eval, answers)
     print("F1: ", f1)
-    tn, fp, fn, tp = confusion_matrix(y_eval, answers)
+    tn, fp, fn, tp = confusion_matrix(y_eval, answers).ravel()
     # tp = 0
     # fp = 0
     # fn = 0
