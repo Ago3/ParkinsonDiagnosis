@@ -74,8 +74,8 @@ def build_classifier(x_train, y_train):
 
     #SVM Classifier
     svm = SVC(probability=True)
-    params["svm__C"] = list(np.logspace(-2, 10, 3))
-    params["svm__gamma"] = list(np.logspace(-9, 3, 3))
+    params["svm__C"] = list(np.logspace(-2, 8, 2))
+    params["svm__gamma"] = list(np.logspace(-9, 3, 2))
 
     #Multi-layer Perceptron
     mlp = MLPClassifier(activation="relu", batch_size=100)
@@ -88,11 +88,11 @@ def build_classifier(x_train, y_train):
 
     #Random Forest
     rf = RandomForestClassifier(criterion="entropy", n_jobs=-1)
-    params["rf__n_estimators"] = [10, 100]
+    params["rf__n_estimators"] = [10, 50]
 
     #NSVC
     nsvc = NuSVC(nu=0.01, probability=True)
-    params["nsvc__gamma"] = list(np.logspace(-2, 10, 5))
+    params["nsvc__gamma"] = list(np.logspace(-2, 8, 2))
 
     #Decision Tree
     dt = DecisionTreeClassifier(criterion="entropy")
@@ -118,6 +118,7 @@ def build_classifier(x_train, y_train):
 
     print("Tuning parameters..")
     grid.fit(x_train, y_train)
+    print(grid.best_params_)
     print("done!")
 
     return grid
