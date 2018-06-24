@@ -80,7 +80,7 @@ def build_classifier(x_train, y_train):
     #Multi-layer Perceptron
     mlp = MLPClassifier(activation="relu", batch_size=100)
     params["mlp__hidden_layer_sizes"] = [(100,), (50, 50,)]
-    params["mlp__learning_rate_init"] = [0.001, 0.01]
+    #params["mlp__learning_rate_init"] = [0.001, 0.01]
 
     #Logistic Regression Model
     lrm = LogisticRegression()
@@ -114,7 +114,7 @@ def build_classifier(x_train, y_train):
         ("knn", knn),
         ("qda", qda)]
     clf = VotingClassifier(est, voting='soft', n_jobs=-1)
-    grid = GridSearchCV(estimator=clf, param_grid=params, cv=kf, n_jobs=-1, scoring="accuracy")
+    grid = GridSearchCV(estimator=clf, param_grid=params, cv=kf, n_jobs=-1, scoring="accuracy", verbose=1)
 
     print("Tuning parameters..")
     grid.fit(x_train, y_train)
