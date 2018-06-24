@@ -15,7 +15,7 @@ from sklearn.ensemble import RandomForestClassifier
 from sklearn.tree import DecisionTreeClassifier
 from sklearn.neighbors import KNeighborsClassifier
 from sklearn.discriminant_analysis import QuadraticDiscriminantAnalysis
-from sklearn.metrics import accuracy_score, recall_score, f1_score
+from sklearn.metrics import accuracy_score, recall_score, f1_score, confusion_matrix
 
 AGGR_DATA = "./aggregated_data/data.csv"
 RESULTS = "./results.csv"
@@ -142,7 +142,9 @@ def get_answers(ph, pl):
 
 def evaluate(hold_clf, latency_clf, h_eval, l_eval, y_eval):
     print(hold_clf.score(h_eval, y_eval))
+    print(confusion_matrix(y_eval, hold_clf.predict(h_eval)))
     print(latency_clf.score(l_eval, y_eval))
+    print(confusion_matrix(y_eval, latency_clf.predict(l_eval)))
     ph = hold_clf.predict_proba(h_eval)[:,1]
     pl = latency_clf.predict_proba(l_eval)[:,1]
     answers = get_answers(ph, pl)
