@@ -141,6 +141,8 @@ def get_answers(ph, pl):
 
 
 def evaluate(hold_clf, latency_clf, h_eval, l_eval, y_eval):
+    print(hold_clf.score(h_eval, y_eval))
+    print(latency_clf.score(l_eval, y_eval))
     ph = hold_clf.predict_proba(h_eval)[:,1]
     pl = latency_clf.predict_proba(l_eval)[:,1]
     answers = get_answers(ph, pl)
